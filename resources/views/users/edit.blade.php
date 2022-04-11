@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3 mb-md-0">
-                                        <input class="form-control @error('dob') is-invalid @enderror" id="inputDOB" type="date" placeholder="inputDOB" max="{{ date('Y-m-d') }}" name="dob" value="{{ $user->dob }}" />
+                                        <input class="form-control @error('dob') is-invalid @enderror" id="inputDOB" type="date" placeholder="inputDOB" max="{{ date('Y-m-d') }}" name="dob" value="{{ date('Y-m-d', strtotime($user->dob)) }}" />
                                         <label for="inputEmail">DOB</label>
                                         @error('dob')
                                             <span class="invalid-feedback" role="alert">

@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\EditUserRequest;
 
 class UserController extends Controller
 {
@@ -40,19 +42,8 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $this->validate(request(), [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'dob' => ['required'],
-            'phone' => ['required', 'numeric'],
-            'gender' => ['required'],
-            'password' => ['required', 'string', 'min:8', 'same:confirm_password'],
-            'confirm_password' => ['required', 'string', 'min:8'],
-        ]);
-
         $data = request()->all();
 
         DB::beginTransaction();
@@ -106,24 +97,8 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EditUserRequest $request, $id)
     {
-        $rules = [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$id],
-            'dob' => ['required'],
-            'phone' => ['required', 'numeric'],
-            'gender' => ['required'],
-        ];
-
-        if (request('password') != '') {
-            $rules['password'] = ['required', 'string', 'min:8', 'same:confirm_password'];
-            $rules['confirm_password'] = ['required', 'string', 'min:8'];
-        }
-
-        $this->validate(request(), $rules);
-
         DB::beginTransaction();
 
         try {
